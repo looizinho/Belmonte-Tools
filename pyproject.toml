@@ -10,7 +10,7 @@ requires-python = ">=3.10"
 readme = "MIGRATION_PLAN.md"
 license = {text = "Proprietary"}
 authors = [{name = "Belmonte Audiovisual"}]
-dependencies = []
+dependencies = ["rich>=13.0"]
 
 [project.scripts]
 belmonte-tools = "belmonte_tools.cli:main"

@@ -19,6 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
         epilog=dedent(
             """
             Exemplos:
+              belmonte-tools          (abre o menu interativo)
               belmonte-tools list
               belmonte-tools restore-point
               belmonte-tools event-mode
@@ -29,6 +30,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers = parser.add_subparsers(dest="command")
     subparsers.add_parser("list", help="Lista os comandos disponiveis.")
+    subparsers.add_parser("menu", help="Abre o menu interativo (padrao quando sem argumentos).")
 
     for spec in ACTION_SPECS:
         subparsers.add_parser(spec.key, help=spec.description)
@@ -43,6 +45,9 @@ def _print_actions() -> None:
 
 
 def _execute_action(key: str) -> int:
+    if not is_windows():
+        print(f"Erro: '{key}' so pode ser executado no Windows.")
+        return 1
     spec = ACTION_BY_KEY[key]
     if spec.needs_admin and not is_admin():
         print(f"Erro: '{key}' exige permissao de administrador.")
@@ -60,16 +65,13 @@ def _execute_action(key: str) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    if not is_windows():
-        print("BelmonteTools e suportado apenas no Windows.")
-        return 1
-
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    if args.command is None:
-        parser.print_help()
-        return 0
+    # No argument → open interactive menu
+    if args.command is None or args.command == "menu":
+        from .tui import run_menu
+        return run_menu()
 
     if args.command == "list":
         _print_actions()
@@ -83,4 +85,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
