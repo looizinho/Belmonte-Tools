@@ -191,6 +191,11 @@ def open_google_drive() -> str | None:
     return None
 
 
+def open_github_repo() -> str | None:
+    open_url(config.GITHUB_REPO_URL)
+    return None
+
+
 def event_mode() -> str | None:
     create_restore_point()
     set_services_manual()
@@ -231,6 +236,7 @@ def _service_specs() -> Iterable[ActionSpec]:
         ActionSpec("winget-update", "Atualizar Tudo via Winget", "Executa upgrade de todos os pacotes.", False, update_all_winget),
         ActionSpec("disable-background-apps", "Desabilitar Apps em Segundo Plano", "Desliga apps em segundo plano do usuario atual.", False, disable_background_apps),
         ActionSpec("open-drive", "Abrir Google Drive Belmonte", "Abre a pasta do Google Drive configurada.", False, open_google_drive),
+        ActionSpec("open-github", "Abrir Repositorio no GitHub", "Abre o repositorio Belmonte-Tools no navegador.", False, open_github_repo),
         ActionSpec("event-mode", "MODO EVENTO COMPLETO", "Aplica o pacote de ajustes para evento.", True, event_mode),
         ActionSpec("restore-defaults", "Restaurar Configuracoes Padrao Windows", "Reverte as configuracoes principais.", True, restore_defaults),
     )
